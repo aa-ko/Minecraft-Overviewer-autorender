@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  minecraft-overviewer:
+    image: minecraft-overviewer-autorender:0.1.0
+    volumes:
+      - ./world:/world:ro
+      - ./render:/render
+    tmpfs:
+      - /cache:size=4G,uid=1000
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '12.00'
+          memory: 8G
+  reverse-proxy:
+    image: caddy:2.1.1-alpine
+    depends_on:
+      - minecraft-overviewer
+    volumes:
+      - ./render:/render:ro
+    entrypoint: ["caddy", "file-server", "--root", "/render", "--listen", ":1234"]
+    ports:
+      - 1234:1234
+    deploy:
+      mode: replicated
+      replicas: 1
