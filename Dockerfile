@@ -1,7 +1,8 @@
 FROM ubuntu:20.04
 
-RUN apt-get update
-RUN apt-get -y install wget rsync git build-essential python3 python3-pip python3-dev python3-pil python3-numpy
+RUN apt-get update\
+ && apt-get -y install --no-install-recommends wget rsync git build-essential python3 python3-pip python3-dev python3-pil python3-numpy\
+ && rm -rf /var/lib/apt/lists/*
 
 COPY Minecraft-Overviewer /overviewer
 WORKDIR /overviewer
@@ -9,17 +10,17 @@ RUN python3 setup.py build
 
 ENV MC_VERSION=1.16.3
 
-# Mount world directory from host read-only
+# Minecraft world directory
 VOLUME /world
-# Mount tmpfs for caching render artifacts
+# Render cache
 VOLUME /cache
-# Mount target directory (web-server root) from host with write permissions
+# Render target directory / web-server root
 VOLUME /render
 
 COPY autorender.py /overviewer
-COPY docker-requirements.txt /overviewer
+COPY autorender-requirements.txt /overviewer
 WORKDIR /overviewer
-RUN pip3 install -r docker-requirements.txt
+RUN pip3 install -r autorender-requirements.txt
 
 RUN mkdir -p ~/.minecraft/versions/${MC_VERSION}/
 RUN wget https://overviewer.org/textures/${MC_VERSION} -O ~/.minecraft/versions/${MC_VERSION}/${MC_VERSION}.jar
