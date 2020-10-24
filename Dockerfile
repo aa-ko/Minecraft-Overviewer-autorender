@@ -25,4 +25,4 @@ RUN pip3 install -r autorender-requirements.txt
 RUN mkdir -p ~/.minecraft/versions/${MC_VERSION}/
 RUN wget https://overviewer.org/textures/${MC_VERSION} -O ~/.minecraft/versions/${MC_VERSION}/${MC_VERSION}.jar
 
-CMD ["python3", "-u", "./render.py"]
+CMD ["python3", "-u", "./autorender.py"]
