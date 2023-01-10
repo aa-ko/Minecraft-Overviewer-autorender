@@ -1,8 +1,8 @@
 FROM ubuntu:22.04
 
-RUN apt-get update\
- && apt-get -y install --no-install-recommends wget rsync git build-essential python3 python3-pip python3-dev python3-pil python3-numpy\
- && rm -rf /var/lib/apt/lists/*
+RUN apt update
+RUN apt install -y --no-install-recommends wget rsync git build-essential python3 python3-pip python3-dev python3-pil python3-numpy
+RUN rm -rf /var/lib/apt/lists/*
 
 COPY Minecraft-Overviewer /overviewer
 WORKDIR /overviewer
@@ -19,7 +19,6 @@ VOLUME /render
 
 COPY autorender.py /overviewer
 COPY autorender-requirements.txt /overviewer
-WORKDIR /overviewer
 RUN pip3 install -r autorender-requirements.txt
 
 RUN mkdir -p ~/.minecraft/versions/${MC_VERSION}/
