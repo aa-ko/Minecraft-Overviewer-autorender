@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update\
  && apt-get -y install --no-install-recommends wget rsync git build-essential python3 python3-pip python3-dev python3-pil python3-numpy\
@@ -8,7 +8,7 @@ COPY Minecraft-Overviewer /overviewer
 WORKDIR /overviewer
 RUN python3 setup.py build
 
-ENV MC_VERSION=1.16.3
+ENV MC_VERSION=1.19.2
 
 # Minecraft world directory
 VOLUME /world
