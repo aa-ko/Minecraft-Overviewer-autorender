@@ -7,6 +7,12 @@ You can find the pre-built docker image [here](https://hub.docker.com/r/aako/min
 Simply mount your Minecraft world directory into `/world` inside the minecraft-overviewer-autorender container.
 
 ## Known issues and limitations
-* Currently, only a single smooth-lighting render will be produced.
-* You cannot render multiple worlds inside a single container right now.
-* Changes inside the world directory during the rendering process sometimes lead to weird artifacts in the resulting render.
+- Currently, only a single smooth-lighting render will be produced.
+- You cannot render multiple worlds inside a single container right now.
+- Changes inside the world directory during the rendering process sometimes lead to weird artifacts in the resulting render.
+
+## TODO
+- Make the image smaller.. a **lot** smaller!
+- Rewrite 0.3.0 in Rust
+- Sensible logging
+- Prometheus endpoint
