@@ -2,14 +2,42 @@ import subprocess
 import multiprocessing
 import os
 
-def run_renderer(params):
+
+def run_renderer():
     print("Running renderer..")
-    res = subprocess.run(["./overviewer.py", "--rendermodes=smooth-lighting", "-p%s"%(params["thread_count"]), "/world", "/cache"])
-    if res.returncode is not 0:
+    res = subprocess.run(["./overviewer.py",
+                          "--rendermodes=smooth-lighting",
+                          "/world",
+                          "/cache"])
+    if res.returncode != 0:
         print("Something went wrong when executing renderer.")
+        return False
     else:
-        print("Render seems to be successful. Trying to copy result to mounted target folder.")
-        subprocess.run(["rsync", "-qcr", "--delete", "/cache/", "/render"])
+        print("Render seems to be successful.")
+        return True
+
+
+def gen_poi():
+    print("Generating POIs..")
+    res = subprocess.run(["./overviewer.py",
+                          "--genpoi",
+                          "/world",
+                          "/cache"])
+    if res.returncode != 0:
+        print("Something went wrong when generating POIs.")
+        return False
+    else:
+        print("POI generation seems to be successful.")
+        return True
+
+
+def copy_result():
+    subprocess.run(["rsync",
+                    "-qcr",
+                    "--delete",
+                    "/cache/",
+                    "/render"])
+
 
 def apply_env_variables():
     thread_count = os.environ.get("MCOVAR_THREAD_COUNT")
@@ -19,6 +47,11 @@ def apply_env_variables():
         thread_count: thread_count
     }
 
+
 apply_env_variables()
 while(True):
-    run_renderer()
+    render_res = run_renderer()
+    poi_res = gen_poi()
+    if render_res and poi_res:
+        print("Trying to copy result to mounted target folder.")
+        copy_result()

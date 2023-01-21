@@ -1,4 +1,4 @@
-FROM debian:11.6
+FROM debian:stable
 
 # Minecraft world directory
 VOLUME /world
